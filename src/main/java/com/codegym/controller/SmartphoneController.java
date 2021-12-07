@@ -26,7 +26,18 @@ public class SmartphoneController {
         modelAndView.addObject("smartphones", smartphoneService.findAll());
         return modelAndView;
     }
-
+    @GetMapping("/{id}")
+    public ResponseEntity<Smartphone> viewSmartphone(@PathVariable Long id){
+        Optional<Smartphone> smartphoneOptional = smartphoneService.findById(id);
+        if (!smartphoneOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(smartphoneOptional.get(),HttpStatus.OK);
+    }
+@PutMapping
+public ResponseEntity<Smartphone> update(@RequestBody Smartphone smartphone){
+        return new ResponseEntity<>(smartphoneService.save(smartphone),HttpStatus.OK);
+}
     @GetMapping
     public ResponseEntity<Iterable<Smartphone>> allPhones() {
         return new ResponseEntity<>(smartphoneService.findAll(), HttpStatus.OK);
